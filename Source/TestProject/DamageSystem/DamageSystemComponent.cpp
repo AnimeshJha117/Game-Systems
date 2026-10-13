@@ -33,6 +33,13 @@ bool UDamageSystemComponent::HandleIncomingDamage(const FDamageInfo& DamageInfo)
 	}
 	
 	CurrentHealth = FMath::Clamp(CurrentHealth - DamageInfo.DamageAmount, 0.0f, MaxHealth);
+	OnDamageTaken.Broadcast(DamageInfo);
+	if (CurrentHealth <= 0.0f)
+	{
+		IsDead = true;
+		OnDeath.Broadcast();
+	}
+	
 	return true;
 }
 
@@ -41,4 +48,5 @@ void UDamageSystemComponent::HandleIncomingHeal(float HealAmount, AActor* Healer
 	if (IsDead) { return; }
 	
 	CurrentHealth = FMath::Clamp(CurrentHealth + HealAmount, 0.0f, MaxHealth);
+	OnHealRecieved.Broadcast(HealAmount, Healer);
 }
