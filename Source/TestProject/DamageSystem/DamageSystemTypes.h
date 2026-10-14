@@ -25,30 +25,18 @@ enum class EDamageResponse : uint8
 USTRUCT(BlueprintType)
 struct FDamageInfo
 {
-	GENERATED_BODY();
+	GENERATED_BODY()
 	
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
-	float DamageAmount;
+	float DamageAmount {0.0f};
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
-	AActor* DamageDealer;
+	TObjectPtr<AActor> DamageDealer {nullptr};
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
-	bool CanBeBlocked = true;
+	EDamageType DamageType {EDamageType::None};
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
-	bool CanBeParried = false;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
-	bool ShouldDamageInvincible = false;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
-	bool ShouldForceInterrupt = false;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
-	EDamageType DamageType = EDamageType::None;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
-	EDamageResponse DamageResponse = EDamageResponse::None;
+	EDamageResponse DamageResponse {EDamageResponse::None};
 };

@@ -1,6 +1,4 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
-#pragma once
+﻿#pragma once
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
@@ -9,6 +7,7 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDamageTaken, const FDamageInfo&, DamageInfo);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnHealRecieved, float, HealAmount, AActor*, Healer);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnHealthChanged, float, NewCurrentHealth, float, NewMaxHealth);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDeath);
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
@@ -24,17 +23,11 @@ public:
 	float MaxHealth {100.0f};
 	
 private:
-	UPROPERTY()
-	float CurrentHealth {MaxHealth};
+	UPROPERTY(VisibleInstanceOnly, Category = "Health")
+	float CurrentHealth {0.0f};
 	
 	UPROPERTY()
 	bool IsDead {false};
-	
-	UPROPERTY()
-	bool IsBlocking {false};
-	
-	UPROPERTY()
-	bool IsInvincible {false};
 
 protected:
 	// Called when the game starts
@@ -48,27 +41,15 @@ public:
 	void HandleIncomingHeal(float HealAmount, AActor* Healer);
 	
 	//Getter Functions
-	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Health")
-	float GetCurrentHealth() { return CurrentHealth; }
+	UFUNCTION(BlueprintPure, Category = "Health")
+	float GetCurrentHealth() const { return CurrentHealth; }
 	
-	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Health")
-	float GetMaxHealth() { return MaxHealth; }
+	UFUNCTION(BlueprintPure, Category = "Health")
+	float GetMaxHealth() const { return MaxHealth; }
 	
-	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Health")
-	bool GetIsDead() { return IsDead; }
+	UFUNCTION(BlueprintPure, Category = "Health")
+	bool GetIsDead() const { return IsDead; }
 	
-	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "States")
-	bool GetIsInvincible() { return IsInvincible; }
-	
-	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "States")
-	bool GetIsBlocking() { return IsBlocking; }
-	
-	//Setter Functions
-	UFUNCTION(BlueprintCallable, Category = "States")
-	void SetIsInvincible(bool NewInvincible) { IsInvincible = NewInvincible; }
-	
-	UFUNCTION(BlueprintCallable, Category = "States")
-	void SetIsBlocking(bool NewBlocking) { IsInvincible = NewBlocking;}
 	
 	//Delegates
 	UPROPERTY(BlueprintAssignable, Category = "Damage Delegates")
@@ -79,4 +60,7 @@ public:
 	
 	UPROPERTY(BlueprintAssignable, Category = "Damage Delegates")
 	FOnDeath OnDeath;
+	
+	UPROPERTY(BlueprintAssignable, Category = "Damage Delegates")
+	FOnHealthChanged OnHealthChanged;
 };

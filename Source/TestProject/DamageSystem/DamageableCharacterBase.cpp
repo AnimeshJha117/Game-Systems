@@ -1,16 +1,11 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
-
-#include "DamageableCharacterBase.h"
+﻿#include "DamageableCharacterBase.h"
 #include "DamageSystemComponent.h"
 #include "Components/CapsuleComponent.h"
-
 
 // Sets default values
 ADamageableCharacterBase::ADamageableCharacterBase()
 {
-	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;\
+	PrimaryActorTick.bCanEverTick = false;
 	DamageSystemComponent = CreateDefaultSubobject<UDamageSystemComponent>(TEXT("Damage System Component"));
 }
 
