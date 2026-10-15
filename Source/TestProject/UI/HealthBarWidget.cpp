@@ -1,5 +1,5 @@
 ﻿#include "HealthBarWidget.h"
-#include "DamageSystemComponent.h"
+#include "../DamageSystem/DamageSystemComponent.h"
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
 
