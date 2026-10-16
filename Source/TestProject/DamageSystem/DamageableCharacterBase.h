@@ -6,6 +6,7 @@
 #include "DamageableCharacterBase.generated.h"
 
 class UDamageSystemComponent;
+class USoundBase;
 
 UCLASS()
 class TESTPROJECT_API ADamageableCharacterBase : public ACharacter, public IDamagableInterface
@@ -13,11 +14,9 @@ class TESTPROJECT_API ADamageableCharacterBase : public ACharacter, public IDama
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
 	ADamageableCharacterBase();
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
 	UFUNCTION(BlueprintNativeEvent)
@@ -28,9 +27,18 @@ protected:
 	
 	UFUNCTION(BlueprintNativeEvent)
 	void RespondToDeath();
+	
+	//Sounds
+	UPROPERTY(EditDefaultsOnly, Category = "Damage Audio")
+	TObjectPtr<USoundBase> DamageSound;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Damage Audio")
+	TObjectPtr<USoundBase> HealSound;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Damage Audio")
+	TObjectPtr<USoundBase> DeathSound;
 
 public:
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
@@ -46,4 +54,7 @@ public:
 	//Damage System Component
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UDamageSystemComponent> DamageSystemComponent;
+	
+private:
+	void PlayFeedbackSound(USoundBase* FeedbackSound) const;
 };

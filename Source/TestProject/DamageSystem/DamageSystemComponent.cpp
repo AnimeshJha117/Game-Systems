@@ -1,13 +1,10 @@
 ﻿#include "DamageSystemComponent.h"
 
-// Sets default values for this component's properties
 UDamageSystemComponent::UDamageSystemComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
 }
 
-
-// Called when the game starts
 void UDamageSystemComponent::BeginPlay()
 {
 	Super::BeginPlay();

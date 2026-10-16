@@ -1,8 +1,8 @@
 ﻿#include "DamageableCharacterBase.h"
 #include "DamageSystemComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Kismet/GameplayStatics.h"
 
-// Sets default values
 ADamageableCharacterBase::ADamageableCharacterBase()
 {
 	PrimaryActorTick.bCanEverTick = false;
@@ -22,18 +22,27 @@ void ADamageableCharacterBase::BeginPlay()
 	}
 }
 
+void ADamageableCharacterBase::PlayFeedbackSound(USoundBase* FeedbackSound) const
+{
+	if (FeedbackSound) UGameplayStatics::PlaySoundAtLocation(this, FeedbackSound, GetActorLocation());
+}
+
 void ADamageableCharacterBase::RespondToDamage_Implementation(const FDamageInfo& DamageInfo)
 {
-	
+	if (DamageSystemComponent && DamageSystemComponent -> GetCurrentHealth() > 0.0f)
+	{
+		PlayFeedbackSound(DamageSound);
+	}
 }
 
 void ADamageableCharacterBase::RespondToHeal_Implementation(float HealAmount, AActor* Healer)
 {
-	
+	PlayFeedbackSound(HealSound);
 }
 
 void ADamageableCharacterBase::RespondToDeath_Implementation()
 {
+	PlayFeedbackSound(DeathSound);
 	GetCapsuleComponent() -> SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GetMesh() -> SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	GetMesh() -> SetSimulatePhysics(true);

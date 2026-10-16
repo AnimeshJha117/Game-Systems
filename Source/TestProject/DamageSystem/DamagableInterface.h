@@ -5,7 +5,6 @@
 #include "DamageSystemTypes.h"
 #include "DamagableInterface.generated.h"
 
-// This class does not need to be modified.
 UINTERFACE()
 class UDamagableInterface : public UInterface
 {
