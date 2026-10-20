@@ -2,10 +2,12 @@
 #include "DamageSystemComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 ADamageableCharacterBase::ADamageableCharacterBase()
 {
 	PrimaryActorTick.bCanEverTick = false;
+	GetCharacterMovement() -> NavAgentProps.bCanCrouch = true;
 	DamageSystemComponent = CreateDefaultSubobject<UDamageSystemComponent>(TEXT("Damage System Component"));
 }
 
@@ -27,17 +29,28 @@ void ADamageableCharacterBase::PlayFeedbackSound(USoundBase* FeedbackSound) cons
 	if (FeedbackSound) UGameplayStatics::PlaySoundAtLocation(this, FeedbackSound, GetActorLocation());
 }
 
+void ADamageableCharacterBase::PlayRandomSound(const TArray<TObjectPtr<USoundBase>>& Sounds, int32& LastIndex) const
+{
+	if (Sounds.IsEmpty()) { return; }
+	int32 Index = FMath::RandRange(0, Sounds.Num() - 1);
+	
+	if (Sounds.Num() > 1 && Index == LastIndex) { Index = (Index + 1) % Sounds.Num(); }
+
+	LastIndex = Index;
+	PlayFeedbackSound(Sounds[Index]);
+}
+
 void ADamageableCharacterBase::RespondToDamage_Implementation(const FDamageInfo& DamageInfo)
 {
 	if (DamageSystemComponent && DamageSystemComponent -> GetCurrentHealth() > 0.0f)
 	{
-		PlayFeedbackSound(DamageSound);
+		PlayRandomSound(DamageSounds, LastDamageSoundIndex);
 	}
 }
 
 void ADamageableCharacterBase::RespondToHeal_Implementation(float HealAmount, AActor* Healer)
 {
-	PlayFeedbackSound(HealSound);
+	PlayRandomSound(HealSounds, LastHealSoundIndex);
 }
 
 void ADamageableCharacterBase::RespondToDeath_Implementation()
@@ -46,18 +59,6 @@ void ADamageableCharacterBase::RespondToDeath_Implementation()
 	GetCapsuleComponent() -> SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GetMesh() -> SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	GetMesh() -> SetSimulatePhysics(true);
-}
-
-// Called every frame
-void ADamageableCharacterBase::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-}
-
-// Called to bind functionality to input
-void ADamageableCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
 float ADamageableCharacterBase::GetMaxHealth_Implementation()

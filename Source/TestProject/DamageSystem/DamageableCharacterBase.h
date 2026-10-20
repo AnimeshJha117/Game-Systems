@@ -30,20 +30,15 @@ protected:
 	
 	//Sounds
 	UPROPERTY(EditDefaultsOnly, Category = "Damage Audio")
-	TObjectPtr<USoundBase> DamageSound;
+	TArray<TObjectPtr<USoundBase>> DamageSounds;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Damage Audio")
-	TObjectPtr<USoundBase> HealSound;
+	TArray<TObjectPtr<USoundBase>> HealSounds;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Damage Audio")
 	TObjectPtr<USoundBase> DeathSound;
 
 public:
-	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	
 	//Damageable Interface Implementation
 	virtual float GetMaxHealth_Implementation() override;
 	virtual float GetCurrentHealth_Implementation() override;
@@ -57,4 +52,7 @@ public:
 	
 private:
 	void PlayFeedbackSound(USoundBase* FeedbackSound) const;
+	void PlayRandomSound(const TArray<TObjectPtr<USoundBase>>& Sounds, int32& LastIndex) const;
+	int32 LastDamageSoundIndex {INDEX_NONE};
+	int32 LastHealSoundIndex {INDEX_NONE};
 };

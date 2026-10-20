@@ -4,6 +4,12 @@ DerivedDataCache/
 Intermediate/
 Saved/
 Build/
+Content/MCO_Mocap_Basics
+Source/SKMannequin_A_Pose
+Source/SKMannequin_T_Pose
+Source/FBX
+Source/Maya
+Source/Motionbuilder
 Config/DefaultEditorPerProjectUserSettings.ini
 
 # Unreal Engine local data

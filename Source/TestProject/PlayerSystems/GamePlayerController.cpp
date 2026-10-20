@@ -1,6 +1,6 @@
 ﻿#include "GamePlayerController.h"
 #include "../UI/HealthBarWidget.h"
-#include "DamageSystemComponent.h"
+#include "../DamageSystem/DamageSystemComponent.h"
 #include "../UI/ScreenFlashWidget.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputMappingContext.h"
